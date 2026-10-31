@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CalcBiz Pro Dashboard</title>
+
+<style>
+:root{
+ --bg:#f4f7fb;
+ --panel:#ffffff;
+ --panel-soft:#f8fafc;
+ --text:#18243a;
+ --muted:#64748b;
+ --border:#e2e8f0;
+ --primary:#635bff;
+ --primary-2:#8b5cf6;
+ --green:#10b981;
+ --orange:#f59e0b;
+ --red:#ef4444;
+ --shadow:0 18px 60px rgba(15,23,42,.10);
+ --radius:24px;
+}
+
+[data-theme="dark"]{
+ --bg:#0b1220;
+ --panel:#111b2e;
+ --panel-soft:#162238;
+ --text:#f8fafc;
+ --muted:#94a3b8;
+ --border:#263650;
+ --shadow:0 18px 60px rgba(0,0,0,.35);
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+ margin:0;
+ background:
+ radial-gradient(circle at 5% 0%,rgba(99,91,255,.13),transparent 28rem),
+ radial-gradient(circle at 100% 10%,rgba(16,185,129,.10),transparent 25rem),
+ var(--bg);
+ color:var(--text);
+ font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ min-height:100vh;
+}
+
+button,input,select{font:inherit}
+
+button{
+ border:0;
+ cursor:pointer;
+}
+
+.app{
+ display:grid;
+ grid-template-columns:260px 1fr;
+ min-height:100vh;
+}
+
+.sidebar{
+ position:sticky;
+ top:0;
+ height:100vh;
+ padding:25px 18px;
+ background:linear-gradient(180deg,#111a30,#1c1742);
+ color:#fff;
+ overflow:auto;
+}
+
+.brand{
+ display:flex;
+ gap:12px;
+ align-items:center;
+ margin-bottom:35px;
+}
+
+.logo{
+ width:44px;
+ height:44px;
+ display:grid;
+ place-items:center;
+ border-radius:15px;
+ background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+ box-shadow:0 10px 25px rgba(99,91,255,.4);
+ font-size:22px;
+}
+
+.brand h1{
+ margin:0;
+ font-size:20px;
+}
+
+.brand small{
+ color:#b8c2df;
+}
+
+.nav-title{
+ color:#8793b7;
+ font-size:11px;
+ text-transform:uppercase;
+ letter-spacing:1.5px;
+ margin:25px 12px 10px;
+}
+
+.nav button{
+ width:100%;
+ text-align:left;
+ color:#c9d2ee;
+ background:transparent;
+ padding:13px 14px;
+ border-radius:13px;
+ margin:3px 0;
+ transition:.25s;
+}
+
+.nav button:hover,
+.nav button.active{
+ color:#fff;
+ background:linear-gradient(90deg,rgba(139,92,246,.45),rgba(99,91,255,.15));
+ transform:translateX(3px);
+}
+
+.side-card{
+ margin-top:30px;
+ padding:16px;
+ border:1px solid rgba(255,255,255,.12);
+ border-radius:18px;
+ background:rgba(255,255,255,.07);
+}
+
+.side-card strong{
+ display:block;
+ margin-bottom:6px;
+}
+
+.side-card p{
+ color:#b8c2df;
+ font-size:12px;
+ line-height:1.6;
+}
+
+.main{
+ min-width:0;
+ padding:25px;
+}
+
+.topbar{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:18px;
+ margin-bottom:25px;
+}
+
+.mobile-menu{
+ display:none;
+}
+
+.topbar h2{
+ margin:0;
+ font-size:28px;
+ letter-spacing:-.8px;
+}
+
+.topbar p{
+ color:var(--muted);
+ margin:6px 0 0;
+}
+
+.actions{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ justify-content:flex-end;
+}
+
+.btn{
+ border-radius:12px;
+ padding:10px 14px;
+ color:var(--text);
+ background:var(--panel);
+ border:1px solid var(--border);
+ transition:.2s;
+}
+
+.btn:hover{
+ transform:translateY(-2px);
+ box-shadow:0 8px 20px rgba(15,23,42,.10);
+}
+
+.btn-primary{
+ color:white;
+ background:linear-gradient(135deg,var(--primary),var(--primary-2));
+ border:0;
+}
+
+.btn-danger{
+ color:#fff;
+ background:var(--red);
+}
+
+.hero{
+ position:relative;
+ overflow:hidden;
+ border-radius:30px;
+ padding:30px;
+ color:white;
+ background:
+ linear-gradient(115deg,rgba(46,36,126,.95),rgba(99,91,255,.87)),
+ radial-gradient(circle at 90% 20%,#10b981,transparent 30rem);
+ box-shadow:0 22px 60px rgba(79,70,229,.28);
+ margin-bottom:22px;
+}
+
+.hero:after{
+ content:"";
+ position:absolute;
+ width:260px;
+ height:260px;
+ border-radius:50%;
+ right:7%;
+ top:-80px;
+ border:35px solid rgba(255,255,255,.08);
+}
+
+.hero h1{
+ max-width:650px;
+ margin:0;
+ font-size:clamp(28px,4vw,48px);
+ letter-spacing:-1.5px;
+}
+
+.hero p{
+ max-width:650px;
+ color:#dfe3ff;
+ line-height:1.7;
+ margin:14px 0 0;
+}
+
+.hero-badges{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:20px;
+}
+
+.badge{
+ border:1px solid rgba(255,255,255,.2);
+ background:rgba(255,255,255,.1);
+ padding:8px 11px;
+ border-radius:999px;
+ font-size:12px;
+}
+
+.kpis{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:16px;
+ margin-bottom:22px;
+}
+
+.kpi{
+ position:relative;
+ overflow:hidden;
+ padding:20px;
+ border-radius:var(--radius);
+ background:var(--panel);
+ border:1px solid var(--border);
+ box-shadow:var(--shadow);
+ transition:.25s;
+}
+
+.kpi:hover{
+ transform:translateY(-5px);
+}
+
+.kpi:after{
+ content:"";
+ position:absolute;
+ width:90px;
+ height:90px;
+ right:-25px;
+ bottom:-30px;
+ border-radius:50%;
+ background:rgba(99,91,255,.10);
+}
+
+.kpi-label{
+ color:var(--muted);
+ font-size:12px;
+ text-transform:uppercase;
+ letter-spacing:.7px;
+}
+
+.kpi-value{
+ font-size:25px;
+ font-weight:800;
+ margin-top:10px;
+}
+
+.kpi-change{
+ color:var(--green);
+ font-size:12px;
+ margin-top:8px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:minmax(330px,.85fr) minmax(0,1.5fr);
+ gap:20px;
+ align-items:start;
+}
+
+.panel{
+ background:var(--panel);
+ border:1px solid var(--border);
+ border-radius:var(--radius);
+ box-shadow:var(--shadow);
+ padding:22px;
+ margin-bottom:20px;
+}
+
+.panel-header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:15px;
+ margin-bottom:20px;
+}
+
+.panel-header h3{
+ margin:0;
+ font-size:18px;
+}
+
+.panel-header p{
+ margin:5px 0 0;
+ color:var(--muted);
+ font-size:12px;
+}
+
+.tabs{
+ display:flex;
+ gap:8px;
+ padding:5px;
+ background:var(--panel-soft);
+ border:1px solid var(--border);
+ border-radius:14px;
+ margin-bottom:20px;
+}
+
+.tab{
+ flex:1;
+ padding:11px;
+ border-radius:10px;
+ color:var(--muted);
+ background:transparent;
+}
+
+.tab.active{
+ color:white;
+ background:linear-gradient(135deg,var(--primary),var(--primary-2));
+ box-shadow:0 7px 18px rgba(99,91,255,.25);
+}
+
+.form-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:14px;
+}
+
+.field{
+ display:flex;
+ flex-direction:column;
+ gap:7px;
+}
+
+.field.full{
+ grid-column:1/-1;
+}
+
+.field label{
+ color:var(--muted);
+ font-size:12px;
+ font-weight:700;
+}
+
+.field input,
+.field select{
+ width:100%;
+ border:1px solid var(--border);
+ color:var(--text);
+ background:var(--panel-soft);
+ border-radius:12px;
+ padding:12px 13px;
+ outline:none;
+ transition:.2s;
+}
+
+.field input:focus,
+.field select:focus{
+ border-color:var(--primary);
+ box-shadow:0 0 0 4px rgba(99,91,255,.12);
+}
+
+.form-actions{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ margin-top:18px;
+}
+
+.notice{
+ margin-top:13px;
+ padding:12px 14px;
+ border-radius:12px;
+ color:var(--muted);
+ background:var(--panel-soft);
+ font-size:12px;
+ line-height:1.55;
+}
+
+.result-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px;
+}
+
+.result{
+ padding:16px;
+ border:1px solid var(--border);
+ background:var(--panel-soft);
+ border-radius:17px;
+}
+
+.result small{
+ display:block;
+ color:var(--muted);
+ margin-bottom:8px;
+}
+
+.result strong{
+ font-size:20px;
+}
+
+.result.highlight{
+ color:#fff;
+ border:0;
+ background:linear-gradient(135deg,#10b981,#059669);
+}
+
+.result.highlight small{
+ color:#d1fae5;
+}
+
+.chart-wrap{
+ min-height:290px;
+ display:grid;
+ place-items:center;
+ border-radius:18px;
+ background:
+ linear-gradient(rgba(148,163,184,.08) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(148,163,184,.08) 1px,transparent 1px),
+ var(--panel-soft);
+ background-size:28px 28px;
+ overflow:hidden;
+}
+
+.chart-wrap svg{
+ width:100%;
+ height:290px;
+}
+
+.chart-legend{
+ display:flex;
+ gap:15px;
+ flex-wrap:wrap;
+ color:var(--muted);
+ font-size:12px;
+ margin-top:10px;
+}
+
+.dot{
+ display:inline-block;
+ width:9px;
+ height:9px;
+ border-radius:50%;
+ margin-right:5px;
+}
+
+.table-wrap{
+ overflow:auto;
+ max-height:420px;
+ border:1px solid var(--border);
+ border-radius:15px;
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:650px;
+}
+
+th,td{
+ padding:12px;
+ text-align:right;
+ border-bottom:1px solid var(--border);
+ font-size:12px;
+}
+
+th{
+ position:sticky;
+ top:0;
+ color:var(--muted);
+ background:var(--panel-soft);
+ z-index:1;
+}
+
+th:first-child,td:first-child{text-align:left}
+
+.scenarios{
+ display:grid;
+ gap:10px;
+}
+
+.scenario{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ padding:13px;
+ border:1px solid var(--border);
+ border-radius:15px;
+ background:var(--panel-soft);
+}
+
+.scenario strong{display:block}
+.scenario small{color:var(--muted)}
+
+.scenario-actions{
+ display:flex;
+ gap:6px;
+}
+
+.icon-btn{
+ padding:8px 10px;
+ border-radius:9px;
+ color:var(--text);
+ background:var(--panel);
+ border:1px solid var(--border);
+}
+
+.toast{
+ position:fixed;
+ right:22px;
+ bottom:22px;
+ z-index:20;
+ color:#fff;
+ background:#172033;
+ padding:13px 17px;
+ border-radius:13px;
+ box-shadow:0 15px 40px rgba(0,0,0,.25);
+ transform:translateY(120px);
+ opacity:0;
+ transition:.3s;
+}
+
+.toast.show{
+ transform:translateY(0);
+ opacity:1;
+}
+
+.footer{
+ color:var(--muted);
+ text-align:center;
+ padding:18px;
+ font-size:12px;
+}
+
+@media(max-width:1100px){
+.app{grid-template-columns:220px 1fr}
+.kpis{grid-template-columns:repeat(2,1fr)}
+.grid{grid-template-columns:1fr}
+}
+
+@media(max-width:760px){
+.app{display:block}
+.sidebar{
+ position:fixed;
+ z-index:10;
+ width:260px;
+ transform:translateX(-100%);
+ transition:.3s;
+ }
+.sidebar.open{transform:translateX(0)}
+.main{padding:15px}
+.mobile-menu{display:block}
+.topbar{align-items:flex-start}
+.topbar h2{font-size:22px}
+.actions{max-width:170px}
+.hero{padding:23px}
+.kpis{grid-template-columns:1fr 1fr;gap:10px}
+.kpi{padding:14px}
+.kpi-value{font-size:18px}
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.result-grid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:450px){
+.kpis{grid-template-columns:1fr}
+.result-grid{grid-template-columns:1fr}
+.panel{padding:16px}
+.topbar{display:block}
+.actions{margin-top:13px;justify-content:flex-start;max-width:none}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<aside class="sidebar" id="sidebar">
+ <div class="brand">
+ <div class="logo">⌁</div>
+ <div>
+ <h1>CalcBiz Pro</h1>
+ <small>Finance workspace</small>
+ </div>
+ </div>
+
+ <div class="nav-title">Workspace</div>
+ <div class="nav">
+ <button class="active" data-scroll="dashboard">▦ Dashboard</button>
+ <button data-scroll="calculator">◈ Calculator</button>
+ <button data-scroll="gst">◉ GST / Tax</button>
+ <button data-scroll="scenarios">◇ Scenarios</button>
+ </div>
+
+ <div class="nav-title">Preferences</div>
+ <div class="nav">
+ <button id="languageBtn">文 Language</button>
+ <button id="themeBtn">☾ Dark mode</button>
+ <button id="autosaveBtn">♧ Auto-save</button>
+ </div>
+
+ <div class="side-card">
+ <strong>Private by design</strong>
+ <p>Your calculations remain in this browser. Export a JSON backup whenever you need to move your data.</p>
+ </div>
+</aside>
+
+<main class="main">
+
+<header class="topbar">
+ <div>
+ <button class="btn mobile-menu" id="menuBtn">☰</button>
+ <h2 id="pageTitle">Financial command center</h2>
+ <p id="pageSubtitle">Plan better. Understand faster. Grow with confidence.</p>
+ </div>
+
+ <div class="actions">
+ <select class="btn" id="language">
+ <option value="en">English</option>
+ <option value="hi">हिन्दी</option>
+ <option value="ur">اردو</option>
+ </select>
+
+ <select class="btn" id="currency">
+ <option value="INR">₹ INR</option>
+ <option value="USD">$ USD</option>
+ <option value="PKR">₨ PKR</option>
+ <option value="GBP">£ GBP</option>
+ <option value="EUR">€ EUR</option>
+ <option value="AED">د.إ AED</option>
+ </select>
+
+ <button class="btn" id="exportJson">Export JSON</button>
+ <button class="btn btn-primary" id="printBtn">Print report</button>
+ </div>
+</header>
+
+<section class="hero" id="dashboard">
+ <h1 id="heroTitle">Make every financial decision clearer.</h1>
+ <p id="heroText">A premium business, loan and GST calculator dashboard for quick estimates, visual insights and scenario planning.</p>
+ <div class="hero-badges">
+ <span class="badge">⚡ Instant calculations</span>
+ <span class="badge">📊 Visual insights</span>
+ <span class="badge">🔒 Browser-based privacy</span>
+ <span class="badge">🌐 Multilingual</span>
+ </div>
+</section>
+
+<section class="kpis">
+ <div class="kpi">
+ <div class="kpi-label">Primary outcome</div>
+ <div class="kpi-value" id="kpiOne">—</div>
+ <div class="kpi-change">Live estimate</div>
+ </div>
+
+ <div class="kpi">
+ <div class="kpi-label">Total cost</div>
+ <div class="kpi-value" id="kpiTwo">—</div>
+ <div class="kpi-change">Calculated instantly</div>
+ </div>
+
+ <div class="kpi">
+ <div class="kpi-label">Effective rate</div>
+ <div class="kpi-value" id="kpiThree">—</div>
+ <div class="kpi-change">Based on current inputs</div>
+ </div>
+
+ <div class="kpi">
+ <div class="kpi-label">Saved scenarios</div>
+ <div class="kpi-value" id="kpiFour">0</div>
+ <div class="kpi-change">Stored on this device</div>
+ </div>
+</section>
+
+<div class="grid">
+
+<section id="calculator">
+<div class="panel">
+ <div class="panel-header">
+ <div>
+ <h3>Calculation workspace</h3>
+ <p>Choose a module and adjust the assumptions.</p>
+ </div>
+ <span class="badge" style="color:var(--primary);background:rgba(99,91,255,.1)">LIVE</span>
+ </div>
+
+ <div class="tabs">
+ <button class="tab active" data-tab="business">Business</button>
+ <button class="tab" data-tab="loan">Loan / EMI</button>
+ <button class="tab" data-tab="gst">GST</button>
+ </div>
+
+ <form id="calcForm">
+
+ <div id="businessFields">
+ <div class="form-grid">
+ <div class="field">
+ <label>Product price</label>
+ <input type="number" id="price" value="1500" min="0">
+ </div>
+ <div class="field">
+ <label>Monthly units</label>
+ <input type="number" id="units" value="250" min="0">
+ </div>
+ <div class="field">
+ <label>Variable cost / unit</label>
+ <input type="number" id="variableCost" value="650" min="0">
+ </div>
+ <div class="field">
+ <label>Fixed monthly cost</label>
+ <input type="number" id="fixedCost" value="45000" min="0">
+ </div>
+ <div class="field">
+ <label>Marketing cost</label>
+ <input type="number" id="marketing" value="10000" min="0">
+ </div>
+ <div class="field">
+ <label>Target monthly profit</label>
+ <input type="number" id="targetProfit" value="80000" min="0">
+ </div>
+ </div>
+ </div>
+
+ <div id="loanFields" hidden>
+ <div class="form-grid">
+ <div class="field">
+ <label>Loan amount</label>
+ <input type="number" id="loanAmount" value="1200000" min="0">
+ </div>
+ <div class="field">
+ <label>Down payment</label>
+ <input type="number" id="downPayment" value="200000" min="0">
+ </div>
+ <div class="field">
+ <label>Annual interest rate %</label>
+ <input type="number" id="interestRate" value="9" min="0" step=".01">
+ </div>
+ <div class="field">
+ <label>Term in years</label>
+ <input type="number" id="loanYears" value="5" min="1">
+ </div>
+ <div class="field">
+ <label>Processing fee</label>
+ <input type="number" id="processingFee" value="5000" min="0">
+ </div>
+ <div class="field">
+ <label>Extra monthly payment</label>
+ <input type="number" id="extraPayment" value="0" min="0">
+ </div>
+ </div>
+ </div>
+
+ <div id="gstFields" hidden>
+ <div class="form-grid">
+ <div class="field">
+ <label>Base amount</label>
+ <input type="number" id="gstAmount" value="100000" min="0">
+ </div>
+ <div class="field">
+ <label>GST rate %</label>
+ <select id="gstRate">
+ <option value="3">3%</option>
+ <option value="5">5%</option>
+ <option value="12">12%</option>
+ <option value="18" selected>18%</option>
+ <option value="28">28%</option>
+ </select>
+ </div>
+ <div class="field">
+ <label>GST mode</label>
+ <select id="gstMode">
+ <option value="add">Add GST</option>
+ <option value="remove">Remove GST from total</option>
+ </select>
+ </div>
+ <div class="field">
+ <label>Supply type</label>
+ <select id="supplyType">
+ <option value="intra">Intra-state: CGST + SGST</option>
+ <option value="inter">Inter-state: IGST</option>
+ </select>
+ </div>
+ </div>
+ </div>
+
+ <div class="form-actions">
+ <button class="btn btn-primary" type="submit">Calculate now</button>
+ <button class="btn" type="button" id="resetBtn">Reset</button>
+ <button class="btn" type="button" id="saveScenario">Save scenario</button>
+ </div>
+
+ <div class="notice" id="notice">
+ Estimates are for planning purposes only and are not financial, tax or legal advice.
+ </div>
+ </form>
+</div>
+
+<div class="panel" id="gst">
+ <div class="panel-header">
+ <div>
+ <h3>Quick presets</h3>
+ <p>Load a realistic starting point.</p>
+ </div>
+ </div>
+
+ <div class="form-actions">
+ <button class="btn" data-preset="starter">Starter business</button>
+ <button class="btn" data-preset="retail">Retail business</button>
+ <button class="btn" data-preset="car">Car loan</button>
+ <button class="btn" data-preset="home">Home loan</button>
+ </div>
+</div>
+
+<div class="panel" id="scenarios">
+ <div class="panel-header">
+ <div>
+ <h3>Saved scenarios</h3>
+ <p>Compare your saved assumptions.</p>
+ </div>
+ <button class="btn" id="clearScenarios">Clear</button>
+ </div>
+ <div class="scenarios" id="scenarioList">
+ <div class="notice">No saved scenarios yet.</div>
+ </div>
+</div>
+</section>
+
+<section>
+
+<div class="panel">
+ <div class="panel-header">
+ <div>
+ <h3 id="resultTitle">Business results</h3>
+ <p>Key outputs from your current assumptions.</p>
+ </div>
+ <button class="btn" id="csvBtn">Download CSV</button>
+ </div>
+
+ <div class="result-grid" id="results"></div>
+</div>
+
+<div class="panel">
+ <div class="panel-header">
+ <div>
+ <h3 id="chartTitle">Monthly business outlook</h3>
+ <p>Visual representation of your estimate.</p>
+ </div>
+ <button class="btn" id="pngBtn">Export chart</button>
+ </div>
+
+ <div class="chart-wrap" id="chart"></div>
+ <div class="chart-legend" id="legend"></div>
+</div>
+
+<div class="panel">
+ <div class="panel-header">
+ <div>
+ <h3>Details & schedule</h3>
+ <p>Review the calculation line by line.</p>
+ </div>
+ </div>
+ <div class="table-wrap">
+ <table>
+ <thead id="tableHead"></thead>
+ <tbody id="tableBody"></tbody>
+ </table>
+ </div>
+</div>
+
+</section>
+</div>
+
+<div class="footer">
+ CalcBiz Pro · Browser-based estimate tool · Keep exported financial files private
+</div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+const state = {
+ tab:"business",
+ currency:"INR",
+ language:"en",
+ theme:"light",
+ autosave:true,
+ scenarios:[]
+};
+
+const labels = {
+ en:{
+ title:"Financial command center",
+ subtitle:"Plan better. Understand faster. Grow with confidence.",
+ hero:"Make every financial decision clearer.",
+ heroText:"A premium business, loan and GST calculator dashboard for quick estimates, visual insights and scenario planning."
+ },
+ hi:{
+ title:"वित्तीय नियंत्रण केंद्र",
+ subtitle:"बेहतर योजना बनाएं और तेज़ी से समझें।",
+ hero:"हर वित्तीय निर्णय को आसान बनाएं।",
+ heroText:"व्यवसाय, लोन और GST की गणना के लिए एक आधुनिक और आकर्षक डैशबोर्ड।"
+ },
+ ur:{
+ title:"مالیاتی کنٹرول سینٹر",
+ subtitle:"بہتر منصوبہ بندی کریں اور تیزی سے سمجھیں۔",
+ hero:"ہر مالیاتی فیصلے کو آسان بنائیں۔",
+ heroText:"کاروبار، قرض اور GST حساب کے لیے جدید اور خوبصورت ڈیش بورڈ۔"
+ }
+};
+
+function money(value){
+ if(!Number.isFinite(value)) return "—";
+ return new Intl.NumberFormat(
+ state.language==="ur" ? "ur-PK" : state.language==="hi" ? "hi-IN" : "en",
+ {
+ style:"currency",
+ currency:["INR","USD","PKR","GBP","EUR","AED"].includes(state.currency)
+ ? state.currency : "INR",
+ maximumFractionDigits:0
+ }
+ ).format(value);
+}
+
+function number(value){
+ return new Intl.NumberFormat("en-IN",{maximumFractionDigits:2}).format(value);
+}
+
+function toast(message){
+ const el=$("toast");
+ el.textContent=message;
+ el.classList.add("show");
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>el.classList.remove("show"),2600);
+}
+
+function save(){
+ if(!state.autosave)return;
+ localStorage.setItem("calcbiz-pro-state",JSON.stringify(state));
+}
+
+function load(){
+ try{
+ const data=JSON.parse(localStorage.getItem("calcbiz-pro-state"));
+ if(data){
+ Object.assign(state,data);
+ if(!Array.isArray(state.scenarios))state.scenarios=[];
+ }
+ }catch(error){}
+}
+
+function setLanguage(){
+ const l=labels[state.language]||labels.en;
+ $("pageTitle").textContent=l.title;
+ $("pageSubtitle").textContent=l.subtitle;
+ $("heroTitle").textContent=l.hero;
+ $("heroText").textContent=l.heroText;
+ document.documentElement.lang=state.language;
+ document.documentElement.dir=state.language==="ur"?"rtl":"ltr";
+}
+
+function setTheme(){
+ document.documentElement.dataset.theme=state.theme;
+ $("themeBtn").textContent=state.theme==="dark"?"☀ Light mode":"☾ Dark mode";
+}
+
+function showTab(tab){
+ state.tab=tab;
+ document.querySelectorAll(".tab").forEach(button=>{
+ button.classList.toggle("active",button.dataset.tab===tab);
+ });
+ $("businessFields").hidden=tab!=="business";
+ $("loanFields").hidden=tab!=="loan";
+ $("gstFields").hidden=tab!=="gst";
+ calculate();
+}
+
+function businessCalculation(){
+ const price=+$("price").value||0;
+ const units=+$("units").value||0;
+ const variable=+$("variableCost").value||0;
+ const fixed=+$("fixedCost").value||0;
+ const marketing=+$("marketing").value||0;
+ const target=+$("targetProfit").value||0;
+
+ const revenue=price*units;
+ const direct=variable*units;
+ const costs=direct+fixed+marketing;
+ const profit=revenue-costs;
+ const margin=revenue?profit/revenue*100:0;
+ const contribution=price-variable;
+ const breakEven=contribution>0?Math.ceil((fixed+marketing)/contribution):Infinity;
+ const targetUnits=contribution>0?Math.ceil((fixed+marketing+target)/contribution):Infinity;
+
+ const rows=[];
+ for(let i=1;i<=6;i++){
+ const u=Math.round(units*(.65+i*.07));
+ const rev=price*u;
+ const cost=variable*u+fixed+marketing;
+ rows.push([i,u,rev,cost,rev-cost]);
+ }
+
+ return {
+ type:"business",
+ revenue,direct,costs,profit,margin,breakEven,targetUnits,
+ rows
+ };
+}
+
+function loanCalculation(){
+ const amount=+$("loanAmount").value||0;
+ const down=+$("downPayment").value||0;
+ const annual=+$("interestRate").value||0;
+ const years=+$("loanYears").value||0;
+ const fee=+$("processingFee").value||0;
+ const extra=+$("extraPayment").value||0;
+
+ const principal=Math.max(0,amount-down);
+ const months=Math.max(1,years*12);
+ const rate=annual/100/12;
+ const baseEmi=rate===0?principal/months:
+ principal*rate*Math.pow(1+rate,months)/(Math.pow(1+rate,months)-1);
+ const emi=baseEmi+extra;
+
+ let balance=principal;
+ let interest=0;
+ let paymentCount=0;
+ const rows=[];
+
+ while(balance>0.01 && paymentCount<1000){
+ paymentCount++;
+ const interestPart=balance*rate;
+ const principalPart=Math.min(balance,Math.max(0,emi-interestPart));
+ const payment=principalPart+interestPart;
+ balance=Math.max(0,balance-principalPart);
+ interest+=interestPart;
+
+ if(paymentCount<=60 || balance===0){
+ rows.push([
+ paymentCount,
+ money(payment),
+ money(principalPart),
+ money(interestPart),
+ money(balance)
+ ]);
+ }
+
+ if(principalPart<=0)break;
+ }
+
+ return {
+ type:"loan",
+ principal,
+ emi,
+ interest,
+ total:principal+interest+fee,
+ fee,
+ months:paymentCount,
+ rows
+ };
+}
+
+function gstCalculation(){
+ const amount=+$("gstAmount").value||0;
+ const rate=(+$("gstRate").value||0)/100;
+ const mode=$("gstMode").value;
+ const supply=$("supplyType").value;
+
+ let base,gst,total;
+ if(mode==="add"){
+ base=amount;
+ gst=amount*rate;
+ total=base+gst;
+ }else{
+ total=amount;
+ base=amount/(1+rate);
+ gst=total-base;
+ }
+
+ return {
+ type:"gst",
+ base,gst,total,
+ cgst:supply==="intra"?gst/2:0,
+ sgst:supply==="intra"?gst/2:0,
+ igst:supply==="inter"?gst:0,
+ rows:[
+ ["Base amount",money(base)],
+ ["GST amount",money(gst)],
+ ["Final amount",money(total)]
+ ]
+ };
+}
+
+function resultCard(label,value,highlight=false){
+ return `
+ <div class="result ${highlight?"highlight":""}">
+ <small>${label}</small>
+ <strong>${value}</strong>
+ </div>
+ `;
+}
+
+function renderBusiness(data){
+ $("resultTitle").textContent="Business results";
+ $("chartTitle").textContent="Monthly business outlook";
+
+ $("results").innerHTML=[
+ resultCard("Revenue",money(data.revenue)),
+ resultCard("Total costs",money(data.costs)),
+ resultCard("Operating profit",money(data.profit),true),
+ resultCard("Profit margin",number(data.margin)+"%"),
+ resultCard("Break-even units",Number.isFinite(data.breakEven)?number(data.breakEven):"Not attainable"),
+ resultCard("Target profit units",Number.isFinite(data.targetUnits)?number(data.targetUnits):"Not attainable")
+ ].join("");
+
+ $("kpiOne").textContent=money(data.profit);
+ $("kpiTwo").textContent=money(data.costs);
+ $("kpiThree").textContent=number(data.margin)+"%";
+
+ $("tableHead").innerHTML="<tr><th>Month</th><th>Units</th><th>Revenue</th><th>Costs</th><th>Profit</th></tr>";
+ $("tableBody").innerHTML=data.rows.map(row=>`
+ <tr>
+ <td>${row[0]}</td>
+ <td>${number(row[1])}</td>
+ <td>${money(row[2])}</td>
+ <td>${money(row[3])}</td>
+ <td>${money(row[4])}</td>
+ </tr>
+ `).join("");
+
+ drawBusinessChart(data.rows);
+}
+
+function renderLoan(data){
+ $("resultTitle").textContent="Loan / EMI results";
+ $("chartTitle").textContent="Loan repayment composition";
+
+ $("results").innerHTML=[
+ resultCard("Financed principal",money(data.principal)),
+ resultCard("Monthly payment",money(data.emi),true),
+ resultCard("Total interest",money(data.interest)),
+ resultCard("Total loan cost",money(data.total)),
+ resultCard("Payments",number(data.months)),
+ resultCard("Processing fee",money(data.fee))
+ ].join("");
+
+ $("kpiOne").textContent=money(data.emi);
+ $("kpiTwo").textContent=money(data.total);
+ $("kpiThree").textContent=number(data.principal?data.interest/data.principal*100:0)+"%";
+
+ $("tableHead").innerHTML="<tr><th>#</th><th>Payment</th><th>Principal</th><th>Interest</th><th>Balance</th></tr>";
+ $("tableBody").innerHTML=data.rows.map(row=>`
+ <tr>
+ <td>${row[0]}</td>
+ <td>${row[1]}</td>
+ <td>${row[2]}</td>
+ <td>${row[3]}</td>
+ <td>${row[4]}</td>
+ </tr>
+ `).join("");
+
+ drawLoanChart(data);
+}
+
+function renderGST(data){
+ $("resultTitle").textContent="GST / Tax results";
+ $("chartTitle").textContent="Tax distribution";
+
+ $("results").innerHTML=[
+ resultCard("Base amount",money(data.base)),
+ resultCard("GST amount",money(data.gst),true),
+ resultCard("Final amount",money(data.total)),
+ resultCard("CGST",money(data.cgst)),
+ resultCard("SGST",money(data.sgst)),
+ resultCard("IGST",money(data.igst))
+ ].join("");
+
+ $("kpiOne").textContent=money(data.total);
+ $("kpiTwo").textContent=money(data.gst);
+ $("kpiThree").textContent=number(data.total?data.gst/data.total*100:0)+"%";
+
+ $("tableHead").innerHTML="<tr><th>Component</th><th>Value</th></tr>";
+ $("tableBody").innerHTML=data.rows.map(row=>`
+ <tr><td>${row[0]}</td><td>${row[1]}</td></tr>
+ `).join("");
+
+ drawGSTChart(data);
+}
+
+function svgText(x,y,text,color="var(--muted)",size="12",anchor="middle"){
+ return `<text x="${x}" y="${y}" fill="${color}" font-size="${size}" text-anchor="${anchor}" font-family="Arial">${text}</text>`;
+}
+
+function drawBusinessChart(rows){
+ const w=760,h=290,p=42;
+ const max=Math.max(...rows.map(x=>Math.max(x[2],x[3],Math.abs(x[4]))),1);
+ const x=i=>p+i*(w-p*2)/(rows.length-1);
+ const y=v=>h-p-(v/max)*(h-p*2);
+
+ const revenue=rows.map((r,i)=>`${x(i)},${y(r[2])}`).join(" ");
+ const cost=rows.map((r,i)=>`${x(i)},${y(r[3])}`).join(" ");
+ const profit=rows.map((r,i)=>`${x(i)},${y(Math.max(0,r[4]))}`).join(" ");
+
+ $("chart").innerHTML=`
+ <svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Business chart">
+ <polyline points="${revenue}" fill="none" stroke="#635bff" stroke-width="4"/>
+ <polyline points="${cost}" fill="none" stroke="#f59e0b" stroke-width="4"/>
+ <polyline points="${profit}" fill="none" stroke="#10b981" stroke-width="4"/>
+ ${rows.map((r,i)=>svgText(x(i),h-15,"M"+r[0],"var(--muted)","11")).join("")}
+ </svg>`;
+
+ $("legend").innerHTML=`
+ <span><i class="dot" style="background:#635bff"></i>Revenue</span>
+ <span><i class="dot" style="background:#f59e0b"></i>Costs</span>
+ <span><i class="dot" style="background:#10b981"></i>Profit</span>`;
+}
+
+function drawLoanChart(data){
+ const total=data.principal+data.interest;
+ const principalDeg=total?data.principal/total*360:0;
+ const interestDeg=360-principalDeg;
+
+ $("chart").innerHTML=`
+ <svg viewBox="0 0 760 290">
+ <circle cx="240" cy="145" r="88" fill="none" stroke="#263650" stroke-width="28"/>
+ <circle cx="240" cy="145" r="88" fill="none" stroke="#635bff" stroke-width="28"
+ stroke-dasharray="${principalDeg*1.54} 1000" transform="rotate(-90 240 145)"/>
+ <circle cx="240" cy="145" r="88" fill="none" stroke="#f59e0b" stroke-width="28"
+ stroke-dasharray="${interestDeg*1.54} 1000"
+ stroke-dashoffset="-${principalDeg*1.54}"
+ transform="rotate(-90 240 145)"/>
+ ${svgText(240,140,"Loan","var(--text)","17")}
+ ${svgText(240,162,money(total),"var(--muted)","12")}
+ ${svgText(470,105,"Principal: "+money(data.principal),"var(--text)","14","start")}
+ ${svgText(470,140,"Interest: "+money(data.interest),"var(--text)","14","start")}
+ ${svgText(470,175,"Payments: "+number(data.months),"var(--text)","14","start")}
+ </svg>`;
+
+ $("legend").innerHTML=`
+ <span><i class="dot" style="background:#635bff"></i>Principal</span>
+ <span><i class="dot" style="background:#f59e0b"></i>Interest</span>`;
+}
+
+function drawGSTChart(data){
+ const total=data.total||1;
+ const gstDeg=data.gst/total*360;
+
+ $("chart").innerHTML=`
+ <svg viewBox="0 0 760 290">
+ <circle cx="240" cy="145" r="88" fill="none" stroke="#10b981" stroke-width="28"/>
+ <circle cx="240" cy="145" r="88" fill="none" stroke="#ef4444" stroke-width="28"
+ stroke-dasharray="${gstDeg*1.54} 1000"
+ transform="rotate(-90 240 145)"/>
+ ${svgText(240,140,"GST","var(--text)","18")}
+ ${svgText(240,162,number(data.gst/data.total*100)+"%","var(--muted)","12")}
+ ${svgText(470,105,"Base: "+money(data.base),"var(--text)","14","start")}
+ ${svgText(470,140,"Tax: "+money(data.gst),"var(--text)","14","start")}
+ ${svgText(470,175,"Total: "+money(data.total),"var(--text)","14","start")}
+ </svg>`;
+
+ $("legend").innerHTML=`
+ <span><i class="dot" style="background:#10b981"></i>Base amount</span>
+ <span><i class="dot" style="background:#ef4444"></i>GST</span>`;
+}
+
+function calculate(){
+ let data;
+ if(state.tab==="business")data=businessCalculation();
+ if(state.tab==="loan")data=loanCalculation();
+ if(state.tab==="gst")data=gstCalculation();
+
+ if(state.tab==="business")renderBusiness(data);
+ if(state.tab==="loan")renderLoan(data);
+ if(state.tab==="gst")renderGST(data);
+
+ $("kpiFour").textContent=state.scenarios.length;
+ window.currentData=data;
+ save();
+}
+
+function currentInputs(){
+ const ids=state.tab==="business"
+ ?["price","units","variableCost","fixedCost","marketing","targetProfit"]
+ :state.tab==="loan"
+ ?["loanAmount","downPayment","interestRate","loanYears","processingFee","extraPayment"]
+ :["gstAmount","gstRate","gstMode","supplyType"];
+
+ const data={};
+ ids.forEach(id=>data[id]=$(id).value);
+ return data;
+}
+
+function restoreInputs(data){
+ Object.entries(data||{}).forEach(([id,value])=>{
+ if($(id))$(id).value=value;
+ });
+ calculate();
+}
+
+function saveScenario(){
+ const name=prompt("Scenario name:",state.tab+" scenario");
+ if(!name)return;
+
+ state.scenarios.push({
+ name:name.slice(0,40),
+ type:state.tab,
+ currency:state.currency,
+ data:currentInputs()
+ });
+
+ if(state.scenarios.length>12)state.scenarios.shift();
+ renderScenarios();
+ save();
+ toast("Scenario saved successfully.");
+}
+
+function renderScenarios(){
+ $("kpiFour").textContent=state.scenarios.length;
+
+ if(!state.scenarios.length){
+ $("scenarioList").innerHTML='<div class="notice">No saved scenarios yet.</div>';
+ return;
+ }
+
+ $("scenarioList").innerHTML=state.scenarios.map((s,i)=>`
+ <div class="scenario">
+ <div>
+ <strong>${escapeHTML(s.name)}</strong>
+ <small>${s.type.toUpperCase()} · ${s.currency}</small>
+ </div>
+ <div class="scenario-actions">
+ <button class="icon-btn" data-load="${i}">Load</button>
+ <button class="icon-btn" data-delete="${i}">Delete</button>
+ </div>
+ </div>
+ `).join("");
+}
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,char=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ }[char]));
+}
+
+function downloadBlob(blob,name){
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download=name;
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+function exportJSON(){
+ const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+ downloadBlob(blob,"calcbiz-pro-backup.json");
+ toast("JSON backup exported.");
+}
+
+function exportCSV(){
+ const rows=[["CalcBiz Pro Export"],["Module",state.tab],["Currency",state.currency],[]];
+
+ if(state.tab==="business"){
+ const d=businessCalculation();
+ rows.push(
+ ["Metric","Value"],
+ ["Revenue",d.revenue],
+ ["Costs",d.costs],
+ ["Profit",d.profit],
+ ["Margin",d.margin],
+ [],
+ ["Month","Units","Revenue","Costs","Profit"],
+...d.rows
+ );
+ }
+
+ if(state.tab==="loan"){
+ const d=loanCalculation();
+ rows.push(
+ ["Metric","Value"],
+ ["Principal",d.principal],
+ ["Monthly payment",d.emi],
+ ["Interest",d.interest],
+ ["Total",d.total],
+ [],
+ ["Payment","Payment amount","Principal","Interest","Balance"],
+...d.rows
+ );
+ }
+
+ if(state.tab==="gst"){
+ const d=gstCalculation();
+ rows.push(
+ ["Metric","Value"],
+ ["Base",d.base],
+ ["GST",d.gst],
+ ["Total",d.total],
+ ["CGST",d.cgst],
+ ["SGST",d.sgst],
+ ["IGST",d.igst]
+ );
+ }
+
+ const csv=rows.map(row=>row.map(value=>`"${String(value??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+ downloadBlob(new Blob(["\uFEFF"+csv],{type:"text/csv"}),`calcbiz-${state.tab}.csv`);
+ toast("CSV file exported.");
+}
+
+function exportPNG(){
+ const svg=$("chart").querySelector("svg");
+ if(!svg){
+ toast("Chart is not available.");
+ return;
+ }
+
+ const source=new XMLSerializer().serializeToString(svg);
+ const image=new Image();
+ const url=URL.createObjectURL(new Blob([source],{type:"image/svg+xml"}));
+
+ image.onload=()=>{
+ const canvas=document.createElement("canvas");
+ canvas.width=1000;
+ canvas.height=500;
+ const ctx=canvas.getContext("2d");
+ ctx.fillStyle=getComputedStyle(document.body).backgroundColor||"#fff";
+ ctx.fillRect(0,0,canvas.width,canvas.height);
+ ctx.drawImage(image,30,80,940,360);
+ ctx.fillStyle=getComputedStyle(document.body).color||"#18243a";
+ ctx.font="bold 26px Arial";
+ ctx.fillText("CalcBiz Pro — "+state.tab.toUpperCase(),30,45);
+
+ canvas.toBlob(blob=>{
+ if(blob)downloadBlob(blob,`calcbiz-${state.tab}-chart.png`);
+ toast("Chart exported as PNG.");
+ URL.revokeObjectURL(url);
+ },"image/png");
+ };
+
+ image.onerror=()=>{
+ URL.revokeObjectURL(url);
+ toast("Chart export failed.");
+ };
+
+ image.src=url;
+}
+
+function reset(){
+ const defaults={
+ business:{
+ price:1500,units:250,variableCost:650,fixedCost:45000,marketing:10000,targetProfit:80000
+ },
+ loan:{
+ loanAmount:1200000,downPayment:200000,interestRate:9,loanYears:5,processingFee:5000,extraPayment:0
+ },
+ gst:{
+ gstAmount:100000,gstRate:18,gstMode:"add",supplyType:"intra"
+ }
+ };
+
+ restoreInputs(defaults[state.tab]);
+ toast("Inputs reset.");
+}
+
+function preset(name){
+ if(name==="starter"){
+ state.tab="business";
+ showTab("business");
+ restoreInputs({
+ price:1000,units:100,variableCost:400,fixedCost:12000,marketing:3000,targetProfit:30000
+ });
+ }
+
+ if(name==="retail"){
+ state.tab="business";
+ showTab("business");
+ restoreInputs({
+ price:2500,units:250,variableCost:1100,fixedCost:50000,marketing:10000,targetProfit:80000
+ });
+ }
+
+ if(name==="car"){
+ state.tab="loan";
+ showTab("loan");
+ restoreInputs({
+ loanAmount:1500000,downPayment:300000,interestRate:9.5,loanYears:5,processingFee:5000,extraPayment:0
+ });
+ }
+
+ if(name==="home"){
+ state.tab="loan";
+ showTab("loan");
+ restoreInputs({
+ loanAmount:5000000,downPayment:1000000,interestRate:8.5,loanYears:20,processingFee:10000,extraPayment:0
+ });
+ }
+
+ toast("Preset loaded.");
+}
+
+$("calcForm").addEventListener("submit",event=>{
+ event.preventDefault();
+ calculate();
+ toast("Calculation updated.");
+});
+
+document.querySelectorAll(".tab").forEach(button=>{
+ button.addEventListener("click",()=>showTab(button.dataset.tab));
+});
+
+document.querySelectorAll("[data-preset]").forEach(button=>{
+ button.addEventListener("click",()=>preset(button.dataset.preset));
+});
+
+document.querySelectorAll("[data-scroll]").forEach(button=>{
+ button.addEventListener("click",()=>{
+ $(button.dataset.scroll).scrollIntoView({behavior:"smooth"});
+ $("sidebar").classList.remove("open");
+ });
+});
+
+$("currency").addEventListener("change",()=>{
+ state.currency=$("currency").value;
+ calculate();
+});
+
+$("language").addEventListener("change",()=>{
+ state.language=$("language").value;
+ setLanguage();
+ calculate();
+});
+
+$("languageBtn").addEventListener("click",()=>{
+ const list=["en","hi","ur"];
+ state.language=list[(list.indexOf(state.language)+1)%list.length];
+ $("language").value=state.language;
+ setLanguage();
+ calculate();
+});
+
+$("themeBtn").addEventListener("click",()=>{
+ state.theme=state.theme==="dark"?"light":"dark";
+ setTheme();
+ save();
+});
+
+$("autosaveBtn").addEventListener("click",()=>{
+ state.autosave=!state.autosave;
+ $("autosaveBtn").textContent=state.autosave?"♧ Auto-save":"♧ Auto-save off";
+ if(state.autosave)save();
+ toast(state.autosave?"Auto-save enabled":"Auto-save disabled");
+});
+
+$("resetBtn").addEventListener("click",reset);
+$("saveScenario").addEventListener("click",saveScenario);
+$("clearScenarios").addEventListener("click",()=>{
+ state.scenarios=[];
+ renderScenarios();
+ save();
+ toast("Scenarios cleared.");
+});
+
+$("scenarioList").addEventListener("click",event=>{
+ const load=event.target.closest("[data-load]");
+ const remove=event.target.closest("[data-delete]");
+
+ if(load){
+ const scenario=state.scenarios[+load.dataset.load];
+ if(!scenario)return;
+ state.tab=scenario.type;
+ state.currency=scenario.currency;
+ $("currency").value=state.currency;
+ showTab(state.tab);
+ restoreInputs(scenario.data);
+ toast("Scenario loaded.");
+ }
+
+ if(remove){
+ state.scenarios.splice(+remove.dataset.delete,1);
+ renderScenarios();
+ save();
+ toast("Scenario deleted.");
+ }
+});
+
+$("exportJson").addEventListener("click",exportJSON);
+$("csvBtn").addEventListener("click",exportCSV);
+$("pngBtn").addEventListener("click",exportPNG);
+
+$("printBtn").addEventListener("click",()=>{
+ calculate();
+ window.print();
+});
+
+$("menuBtn").addEventListener("click",()=>{
+ $("sidebar").classList.toggle("open");
+});
+
+document.querySelectorAll("input,select").forEach(input=>{
+ input.addEventListener("input",calculate);
+ input.addEventListener("change",calculate);
+});
+
+load();
+
+$("currency").value=state.currency;
+$("language").value=state.language;
+setLanguage();
+setTheme();
+renderScenarios();
+
+const initialDefaults={
+ business:{
+ price:1500,units:250,variableCost:650,fixedCost:45000,marketing:10000,targetProfit:80000
+ },
+ loan:{
+ loanAmount:1200000,downPayment:200000,interestRate:9,loanYears:5,processingFee:5000,extraPayment:0
+ },
+ gst:{
+ gstAmount:100000,gstRate:18,gstMode:"add",supplyType:"intra"
+ }
+};
+
+restoreInputs(initialDefaults.business);
+</script>
+</body>
+</html>
